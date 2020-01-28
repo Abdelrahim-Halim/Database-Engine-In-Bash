@@ -125,7 +125,6 @@ function read_columns_names_and_types {
 				read column_name;
 				if check_column_name_exist; then
 					if validate_column_name ;then
-						echo "here"
 						break;
 					else 					
 						echo "*==== Use another column name ====*"	 
@@ -181,30 +180,50 @@ function validate_column_type {
 		done		
 	done
 }
-				
-echo "*==== Plz, enter table Name ====*"
-read table_name;
 
+function create_table {
+	echo "*==== Plz, enter table Name ====*"
+	read table_name;
+	while [[ true ]]
+	do
+		#if the table is existed before then break the loop  
+		if check_exist; then 				
+			echo "*==== This table is allready exist ====*"
+			break;
+		fi
+        	if validate_table_name; then
+			#if the table is not existed before and have a vaild name 
+			touch $table_name;
+			touch $table_name.md;				
+			#insert Table metaData
+			read_columns_numbers;
+			read_columns_names_and_types ;
+			echo "*==== Table created successfuly ====*"	
+			break;
+		else 
+			echo "*==== Use another name ====*"
+  			read table_name;
+			validate_table_name;
+    		fi
+	done
+}
+				
+create_table;
 while [[ true ]]
 do
-	#if the table is existed before then break the loop  
-	if check_exist; then 				
-		echo "*==== This table is allready exist ====*"
-		break;
-	fi
-        if validate_table_name; then
-		#if the table is not existed before and have a vaild name 
-		touch $table_name;
-		touch $table_name.md;				
-		echo "*==== Table created successfuly ====*"
-		#insert Table metaData
-		read_columns_numbers;
-		read_columns_names_and_types ;	
-		break;
-	else 
-		echo "*==== Use another name ====*"
-  		read table_name;
-		validate_table_name;
-    	fi
-done
+	echo "*==== Do you want create another table! ====*"
+	select type in 'Yes' 'No'
+	do
+		case $REPLY in 
+			1) create_table
+				break ;;
+			2) #menu
+				break 2 ;; 
+			*) echo "*==== Exit ====*";
+				sleep 1;
+				break 2 ;;
+		esac
+	done
+done	
+
 

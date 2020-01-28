@@ -4,7 +4,7 @@ stringReg="^[a-zA-Z]+[a-zA-Z]*$"
 intReg="^[0-9]+[0-9]*$"
 alphNumReg="^[a-zA-Z0-9_]*$"
 
-function check_Tb_exist {
+function check_exist {
 	if [ -f "$table_name" ]; then
 		return 0;
 	else
@@ -85,7 +85,7 @@ function read_record {
 				fi
 			done
 		else
-			echo "${columnsName[i]} using dataType:${columnsTyps[i]}";
+			echo "*==== ${columnsName[i]} using dataType:${columnsTyps[i]} ====*";
 			while [[ true ]]
 			do
 				read -r data;
@@ -103,7 +103,6 @@ function read_record {
 }
 
 table_name=$1
-
 if check_Tb_exist; then
 	read_meta_data
 	echo "*==== Enter the record date ====*"
@@ -118,7 +117,8 @@ if check_Tb_exist; then
 					break ;;
 				2) echo "*==== Record inserted successfully ====*"
 					break 2 ;; 
-				*) echo "*==== Exit ====*"
+				*) echo "*==== Exit ====*";
+					sleep 1;
 					break 2 ;;
 			esac
 		done
