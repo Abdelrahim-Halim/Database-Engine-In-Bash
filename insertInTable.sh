@@ -103,7 +103,7 @@ function read_record {
 }
 
 table_name=$1
-if check_Tb_exist; then
+if check_exist; then
 	read_meta_data
 	echo "*==== Enter the record date ====*"
 	read_record;
