@@ -3,7 +3,7 @@
 stringReg="^[a-zA-Z]+[a-zA-Z]*$"
 intReg="^[0-9]+[0-9]*$"
 alphNumReg="^[a-zA-Z0-9_]*$"
-
+source color.sh
 function check_exist {
 	if [ -f "$table_name" ]; then
 		return 0;
@@ -31,7 +31,7 @@ function check_repeated_pk {
 
 function cheak_vaild_data {
 	if [ -z "$data" ]; then
-		echo "*==== ${columnsName[i]} can't be NULL ====*"
+		echo -e "${RED}*==== ${columnsName[i]} can't be NULL ====*${NC}"
 		return 0;
 	else
 		case ${columnsTyps[$1]} in
@@ -39,7 +39,7 @@ function cheak_vaild_data {
 				if [[ $data =~ $intReg ]]; then
 					return 1;
 				else
-					echo "*== ${columnsName[i]} only support Interger ==*"
+					echo -e "${YELLOW}*== ${columnsName[i]} only support Interger ==*${NC}"
 					return 0;
 				fi
 				break ;;
@@ -47,7 +47,7 @@ function cheak_vaild_data {
 				if [[ $data =~ $stringReg ]]; then
 					return 1;
 				else
-					echo "*== ${columnsName[i]} only support String ==*"
+					echo -e "${YELLOW}*== ${columnsName[i]} only support String ==*${NC}"
 					return 0;
 				fi
 				break ;;
@@ -55,7 +55,7 @@ function cheak_vaild_data {
 				if [[ $data =~ $alphNumReg ]]; then
 					return 1;
 				else
-					echo "*== ${columnsName[i]} only support AlphaNumeric ==*"
+					echo -e "${YELLOW}*== ${columnsName[i]} only support AlphaNumeric ==*${NC}"
 					return 0;
 				fi
 				break ;;
@@ -67,12 +67,12 @@ function read_record {
 	for (( i=0; i<$columnsNumber; i++ ))	
 	do
 		if (( $i==0 )); then
-			echo "*==== ${columnsName[i]} using dataType:${columnsTyps[i]} ====*";	
+			echo -e "${BLUE}*==== ${columnsName[i]} using dataType:${columnsTyps[i]} ====*${NC}";	
 			while [[ true ]]
 			do
 				read -r data;
 				if check_repeated_pk $data; then
-					echo "*==== Sorry, this PK is used before ====*"
+					echo -e "${YELLOW}*==== Sorry, this PK is used before ====*${NC}"
 					echo "*==== Use another PK ====*"
 				else
 					if cheak_vaild_data $i; then
@@ -85,7 +85,7 @@ function read_record {
 				fi
 			done
 		else
-			echo "*==== ${columnsName[i]} using dataType:${columnsTyps[i]} ====*";
+			echo -e "${BLUE}*==== ${columnsName[i]} using dataType:${columnsTyps[i]} ====*${NC}";
 			while [[ true ]]
 			do
 				read -r data;
@@ -102,21 +102,25 @@ function read_record {
 	echo ${record[*]} >> $table_name	
 }
 
-table_name=$1
+clear
+echo "*==== Enter Table Name ====*"
+read table_name
 if check_exist; then
 	read_meta_data
 	echo "*==== Enter the record date ====*"
 	read_record;
+	echo -e "${GREEN}*==== Record inserted successfully ====*${NC}"
 	while [[ true ]]
 	do
-		echo "*==== Do you want insert another record! ====*"
+		echo -e "${BLUE}*==== Do you want insert another record! ====*${NC}"
 		select type in 'Yes' 'No'
 		do
 			case $REPLY in 
-				1) read_record
+				1) read_record;
+					sleep 1;
+					echo -e "${GREEN}*==== Record inserted successfully ====*${NC}"
 					break ;;
-				2) echo "*==== Record inserted successfully ====*"
-					break 2 ;; 
+				2) break 2 ;; 
 				*) echo "*==== Exit ====*";
 					sleep 1;
 					break 2 ;;
@@ -124,7 +128,8 @@ if check_exist; then
 		done
 	done	
 else
-	echo "*==== This table is not exist! ====*"
+	echo -e "${RED}*==== This table is not exist! ====*${NC}"
 fi
+
 
 
