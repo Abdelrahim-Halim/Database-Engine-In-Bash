@@ -24,12 +24,13 @@ if check_exist; then
 		fi
 	done
 	sed -i "/$pkitem/d" $table_name;
-	echo "row deleted"
+	echo "Row Deleted Sucssesfully 😎"
 	echo "Press Enter to Continue..."
 	read
 else
 	echo "*==== This table is not exist! ====*"
-	echo "Press Enter to Continue..."
+	echo "For help use DISPLAY TABLES option To Know Your Tables And Come Again ✌"
+	echo "press ENTER to back..."	
 	read
 fi
 

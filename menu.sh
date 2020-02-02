@@ -18,20 +18,57 @@ do
 	echo "8- SELECT FROM TABLE"
 	echo "9- Back "
 	echo
+	boy=$(ls | grep -v ".md$")
 	read choice
 	case $choice in
 		1) echo
 			echo "Your Tables Are : "
-			ls | grep -v ".md$"
+			if [[ -z $boy ]];then
+				echo "Database Is Empty"
+			else 
+				ls | grep -v ".md$"
+			fi
 			sleep 3;;
-		2) showTableContent.sh;;
+		2) if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else 
+			showTableContent.sh
+		fi
+		;;
 		3) createTable.sh;;
-		4) insertInTable.sh;;
-		5) updateTable.sh;;
-		6) delTableR.sh;;
-		7) deleteTable.sh;;
-		8) select.sh;;
-		9) main.sh;;
+		4) if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else 
+			insertInTable.sh
+		fi ;;
+		5) if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else 
+		 updateTable.sh
+		fi;;
+		6)if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else  
+			delTableR.sh
+		fi;;
+		7) if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else  
+			deleteTable.sh
+		fi ;;
+		8) if [[ -z $boy ]];then
+			echo "Database Is Empty"
+			sleep 2
+		else 
+			select.sh
+		fi ;;
+		9) main.sh
+			exit ;;
 		*) echo "${RED}*=== Sorry, Choose operation's Number from the list ===*${NC}"
 	esac
 done	 

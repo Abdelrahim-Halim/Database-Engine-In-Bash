@@ -129,6 +129,9 @@ if check_exist; then
 	done	
 else
 	echo -e "${RED}*==== This table is not exist! ====*${NC}"
+	echo "For help use DISPLAY TABLES option To Know Your Tables And Come Again ✌"
+	echo "press ENTER to back..."	
+	read
 fi
 
 

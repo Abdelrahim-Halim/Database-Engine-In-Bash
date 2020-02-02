@@ -27,6 +27,7 @@ if [ -f "$table_name" ];then
 	done
 else
 	echo -e "${RED}*==== No table matched ====*${NC}"
+	echo "For help use DISPLAY TABLES option To Know Your Tables And Come Again ✌"
 	echo "press ENTER to back..."	
 	read
 fi

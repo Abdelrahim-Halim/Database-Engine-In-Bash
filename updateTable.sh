@@ -3,7 +3,7 @@
 stringReg="^[a-zA-Z]+[a-zA-Z]*$"
 intReg="^[0-9]+[0-9]*$"
 alphNumReg="^[a-zA-Z0-9_]*$"
-
+clear
 function check_exist {
 	if [ -f "$table_name" ]; then
 		return 0;
@@ -108,13 +108,27 @@ if check_exist; then
 								break 2;
 							fi
     						fi
+				else
+				columnsTyps=($(awk -v colNumber="$cn" 'BEGIN{FS=":"}{if(NR==colNumber)print $2;}' $table_name.md))
+				cheak_vaild_data $columnsTyps $newdata;
+    				if [[ $? == 0 ]];then
+    					echo "Column Type Not Right"
+    				else
+					awk -v rowNumber="$rn" -v colNumber="$cn" -v newData="$newdata" '{if(NR == rowNumber){$colNumber = newData};print $0;}' $table_name >> $table_name.new;
+					mv $table_name.new $table_name
+					echo "Table Updated 😎✌"
+					echo "Press Enter to Continue..."
+					read
+					break 2;
 				fi
 			fi		
+			fi
 		done
 	fi	
 else
 	echo "*==== This Table Isn't Exist! ====*"
-	echo "Press Enter to Continue..."
+	echo "For help use DISPLAY TABLES option To Know Your Tables And Come Again ✌"
+	echo "press ENTER to back..."	
 	read
 fi
 

@@ -26,10 +26,10 @@ do
 		   echo -e "Your Databases are..."
 		   ls /home/$USER/Desktop/databases | cut -f1 -d" " 
 		   sleep 5;;
-		5) echo -e "${YELLOW}See U soon..${NC}"
+		5) echo -e "${YELLOW}See U soon..👋🤝${NC}"
 		   echo
 		   sleep 2
-		   exit;;
+		   exit ;;
 		*) echo -e "${RED}*=== Sorry, Choose operation's Number from the list ===*${NC}"
 		   sleep 2 ;;
 	esac
