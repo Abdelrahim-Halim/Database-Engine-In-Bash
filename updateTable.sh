@@ -3,6 +3,7 @@
 stringReg="^[a-zA-Z]+[a-zA-Z]*$"
 intReg="^[0-9]+[0-9]*$"
 alphNumReg="^[a-zA-Z0-9_]*$"
+
 function check_exist {
 	if [ -f "$table_name" ]; then
 		return 0;
@@ -15,7 +16,7 @@ function check_repeated_pk {
 	isFounded=1
 	for field in $(cut -f1 -d: "$table_name") 
 	do
-		if [[ $field = "$1" ]]
+		if [[ $field == "$1" ]]
 		then
 			isFounded=0
 			break
@@ -23,6 +24,7 @@ function check_repeated_pk {
 	done
 	return $isFounded
 }
+
 function cheak_vaild_data {
 
     if [ $1 == "Integer" ] 
@@ -54,73 +56,65 @@ function cheak_vaild_data {
     fi 
 }
 
-table_name=$1
+echo "*==== Enter the table name ====*"
+read -e table_name
 if check_exist; then
-    while [[ true ]]
+	pk=$(awk 'BEGIN{FS=":"}{if(NR==1)print $1;}' $table_name.md)	
+	echo "Your PK is : ${pk}"
+	while [[ true ]]
 	do
-	echo "*==== Enter the pk ====*"
-	pkname=($(awk 'BEGIN{FS=":"}{if(NR==1)print $1;}' $table_name.md))
-	read pk
-if [ "$pkname" != "$pk" ]; then
-	echo "*==== your pk not right ====*"
-	
-else
-break
-fi
-done
-while [[ true ]]
-	do
-	echo "enter pk item to search"
-	read item
-	pkitem=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
-	if [ -f $pkitem ] 
-	then 
-	echo "*==== your pk item not right ====*"
-	
-else
-break
-fi
-done
+		echo "Enter PK Value To Search"
+		read item
+		pkitem=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
+		if [ -f $pkitem ];then 
+			echo "*==== Your PK Value Not Right ====*"
+		else
+			break
+		fi
+	done
 	rn=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
-	echo "enter col name"
+	echo "Enter Col Name That You Want To Update"
 	read colname
-
 	cn=$(awk -F: '{if($1=="'$colname'"){print NR}}' $table_name.md)
-	echo $cn
-	if [ -f $cn ] ;then 
-
-	echo "*==== your colname not right ====*"
-	exit
-else
-	echo "enter col item to update"
-	read newdata
-	if [ -z "$newdata" ]; then
-	echo "*==== ${newdata} can't be NULL ====*"
-	else
-	if [ $colname == $pkname ]
- then
-
-	check_repeated_pk $newdata
-    if [[ $? == 0 ]]
-    then
-        echo "this is repeated pk"
-        exit
-    fi
-    fi
 	
-	columnsTyps=($(awk -v colNumber="$cn" 'BEGIN{FS=":"}{if(NR==colNumber)print $2;}' $table_name.md))
-    cheak_vaild_data $columnsTyps $newdata;
-    if [[ $? == 0 ]] 
-    then
-    echo "Column Type Not Right"
-    else
-    
-	awk -v rowNumber="$rn" -v colNumber="$cn" -v newData="$newdata" '{if(NR == rowNumber){$colNumber = newData};print $0;}' $table_name >> $table_name.new;
-	mv $table_name.new $table_name
-fi
-fi
-fi	
+	if [ -f $cn ] ;then 
+		echo "*==== Your Col Name Not Right ====*"
+		echo "Press Enter to Continue..."
+		read
+		break 2;		
+	else
+		while [[ true ]]
+		do		
+			echo "Enter New Value To Update"
+			read -e newdata
+			if [ -z "$newdata" ]; then
+				echo "*==== ${newdata} can't be NULL ====*"
+			else
+				if [[ $colname == $pk ]];then
+					check_repeated_pk $newdata
+    						if [[ $? == 0 ]];then
+        						echo "This Is Repeated PK"
+						else
+							columnsTyps=($(awk -v colNumber="$cn" 'BEGIN{FS=":"}{if(NR==colNumber)print $2;}' $table_name.md))
+							cheak_vaild_data $columnsTyps $newdata;
+    							if [[ $? == 0 ]];then
+    								echo "Column Type Not Right"
+    							else
+								awk -v rowNumber="$rn" -v colNumber="$cn" -v newData="$newdata" '{if(NR == rowNumber){$colNumber = newData};print $0;}' $table_name >> $table_name.new;
+								mv $table_name.new $table_name
+								echo "Table Updated 😎✌"
+								echo "Press Enter to Continue..."
+								read
+								break 2;
+							fi
+    						fi
+				fi
+			fi		
+		done
+	fi	
 else
-	echo "*==== This table is not exist! ====*"
+	echo "*==== This Table Isn't Exist! ====*"
+	echo "Press Enter to Continue..."
+	read
 fi
 

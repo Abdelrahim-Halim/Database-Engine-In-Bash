@@ -9,23 +9,29 @@ echo -e "${RED}*========= Powerd by: HALIM and MOHAMED ATEF =======*${NC}"
 
 while [[ true ]]
 do
-	echo
+	clear
 	echo -e "*==== Choose operation's Number 1,2,..5 ====*"
 	echo "1- CREATE database"
 	echo "2- USE database"
-	echo "${RED}3- DELETE database${NC}"
+	echo -e "${RED}3- DELETE database${NC}"
 	echo "4- DISPLAY databases"
 	echo "5- EXIT "
 	echo
 	read choice
 	case $choice in
-		1) source createdatabse.sh;;
-		2) source usedatabase.sh;;
-		3) source deletedatabase.sh;;
-		4) source showdatabases.sh;;
-		5) echo "${YELLOW} See U soon..${NC}"
+		1) creatDB.sh ;;
+		2) source useDB.sh;;
+		3) source deleteDB.sh;;
+		4) clear
+		   echo -e "Your Databases are..."
+		   ls /home/$USER/Desktop/databases | cut -f1 -d" " 
+		   sleep 5;;
+		5) echo -e "${YELLOW}See U soon..${NC}"
+		   echo
+		   sleep 2
 		   exit;;
-		*) echo "${RED}*=== Sorry, Choose operation's Number from the list ===*${NC}"
+		*) echo -e "${RED}*=== Sorry, Choose operation's Number from the list ===*${NC}"
+		   sleep 2 ;;
 	esac
 done	 
 

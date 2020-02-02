@@ -6,38 +6,34 @@ function check_exist {
 		return 1;
   	fi
 }
-table_name=$1
+clear
+echo "*==== Enter the table name ====*"
+read -e table_name
 if check_exist; then
-    while [[ true ]]
+	pk=$(awk 'BEGIN{FS=":"}{if(NR==1)print $1;}' $table_name.md)	
+	echo "Your PK is : ${pk}"	
+	while [[ true ]]
 	do
-	echo "*==== Enter the pk ====*"
-	pkname=($(awk 'BEGIN{FS=":"}{if(NR==1)print $1;}' $table_name.md))
-	read pk
-if [ "$pkname" != "$pk" ]; then
-	echo "*==== your pk not right ====*"
-	
-else
-break
-fi
-done
-while [[ true ]]
-	do
-	echo "Enter pk item to Delete Row"
-	read item
-	pkitem=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
-	if [ -f $pkitem ] 
-	then 
-	echo "*==== your pk item not right ====*"
-	
-else
-break
-fi
-done
-
- sed -i "/$pkitem/d" $table_name;
-echo "row deleted"
-
+		echo "Enter pk item to Delete Row"
+		read item
+		pkitem=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
+		if [ -f $pkitem ];then 
+			echo "*==== your pk item not right ====*"
+		else
+			break
+		fi
+	done
+	sed -i "/$pkitem/d" $table_name;
+	echo "row deleted"
+	echo "Press Enter to Continue..."
+	read
 else
 	echo "*==== This table is not exist! ====*"
+	echo "Press Enter to Continue..."
+	read
 fi
+
+
+
+
 
