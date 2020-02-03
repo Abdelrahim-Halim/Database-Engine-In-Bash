@@ -15,7 +15,7 @@ do
 done
 if [ -d "${dbname}" ];then
 	cd /home/$USER/Desktop/databases/$dbname
-	echo "Now , Welcome back in Your Database $dbname 😎"
+	echo "Now , Welcome back in Your Database $dbname 😎"	
 	sleep 2
 	source menu.sh
 else

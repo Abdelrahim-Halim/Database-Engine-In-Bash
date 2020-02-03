@@ -3,6 +3,7 @@
 stringReg="^[a-zA-Z]+[a-zA-Z]*$"
 intReg="^[0-9]+[0-9]*$"
 alphNumReg="^[a-zA-Z0-9_]*$"
+source color.sh
 clear
 function check_exist {
 	if [ -f "$table_name" ]; then
@@ -63,17 +64,17 @@ if check_exist; then
 	echo "Your PK is : ${pk}"
 	while [[ true ]]
 	do
-		echo "Enter PK Value To Search"
+		echo -e "${BLUE}Enter PK Value To Search${NC}"
 		read item
 		pkitem=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
 		if [ -f $pkitem ];then 
-			echo "*==== Your PK Value Not Right ====*"
+			echo -e "${RED}*==== Your PK Value Not Right ====*${NC}"
 		else
 			break
 		fi
 	done
 	rn=$(awk -v items="$item" '{if($1==items){ print NR}}' $table_name )
-	echo "Enter Col Name That You Want To Update"
+	echo -e "${YELLOW}*==== Enter Col Name That You Want To Update ====*${NC}"
 	read colname
 	cn=$(awk -F: '{if($1=="'$colname'"){print NR}}' $table_name.md)
 	
@@ -85,7 +86,7 @@ if check_exist; then
 	else
 		while [[ true ]]
 		do		
-			echo "Enter New Value To Update"
+			echo -e "${BLUE}Enter New Value To Update${NC}"
 			read -e newdata
 			if [ -z "$newdata" ]; then
 				echo "*==== ${newdata} can't be NULL ====*"
@@ -93,12 +94,12 @@ if check_exist; then
 				if [[ $colname == $pk ]];then
 					check_repeated_pk $newdata
     						if [[ $? == 0 ]];then
-        						echo "This Is Repeated PK"
+        						echo -e "${RED}This Is Repeated PK${NC}"
 						else
 							columnsTyps=($(awk -v colNumber="$cn" 'BEGIN{FS=":"}{if(NR==colNumber)print $2;}' $table_name.md))
 							cheak_vaild_data $columnsTyps $newdata;
     							if [[ $? == 0 ]];then
-    								echo "Column Type Not Right"
+    								echo -e "${RED}Column Type Not Right${NC}"
     							else
 								awk -v rowNumber="$rn" -v colNumber="$cn" -v newData="$newdata" '{if(NR == rowNumber){$colNumber = newData};print $0;}' $table_name >> $table_name.new;
 								mv $table_name.new $table_name
@@ -126,7 +127,7 @@ if check_exist; then
 		done
 	fi	
 else
-	echo "*==== This Table Isn't Exist! ====*"
+	echo -e "${RED}*==== This Table Isn't Exist! ====*${NC}"
 	echo "For help use DISPLAY TABLES option To Know Your Tables And Come Again ✌"
 	echo "press ENTER to back..."	
 	read

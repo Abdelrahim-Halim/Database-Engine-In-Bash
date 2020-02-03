@@ -1,5 +1,6 @@
 #!/bin/bash
 source color.sh
+english="^[a-zA-Z]+[a-zA-Z]*$"
 clear
 while true
 do
@@ -16,21 +17,26 @@ do
 				echo -e "${YELLOW}You Must Enter Your Database Name Without Spaces${NC}"
 			else
 				#special characters
-				if [[ "$dbname" = *['!'@#\$%^\&*()-+\.\/]* ]]; then
+				if [[ "$dbname" = *['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  					echo -e "${YELLOW}You Must Enter Your Database Name Without special characters${NC}"
 				else
 					#special characters
-					if [[ "$dbname" = ['!'@#\$%^\&*()-+\.\/]* ]]; then
+					if [[ "$dbname" = ['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  						echo -e "${YELLOW}You Must Enter Your Database Name Without start special characters${NC}"
 					else
 						if [ -d "${dbname}" ];then
 							echo -e "${RED}This Database Already Exist${NC}"
 						else
-							mkdir $dbname
-							sleep 1
-							echo -e "${GREEN}${dbname} DataBase Created Sucssesfully 😎${NC}"
-							sleep 1
-							break
+							#English only
+							if [[ $dbname =~ $english ]]; then
+								mkdir $dbname
+								sleep 1
+								echo -e "${GREEN}${dbname} DataBase Created Sucssesfully 😎${NC}"
+								sleep 1
+								break
+							else
+ 								echo -e "${YELLOW}column_name support English only${NC}"
+							fi		
 						fi
 					fi
 				fi

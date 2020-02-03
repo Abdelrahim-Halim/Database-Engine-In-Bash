@@ -1,6 +1,7 @@
 # !/bin/bash
 
 source color.sh
+english="^[a-zA-Z]+[a-zA-Z]*$"
 function check_exist {
 	if [ -f "$table_name" ]; then
 		return 0;
@@ -24,13 +25,13 @@ function validate_table_name {
 	fi
 
 	#special characters
-	if [[ "$table_name" = *['!'@#\$%^\&*()-+\.\/]* ]]; then
+	if [[ "$table_name" = *['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  		echo -e "${YELLOW}Table name can't have special characters${NC}"
 		return 1;
 	fi
 
 	#special characters
-	if [[ "$table_name" = ['!'@#\$%^\&*()-+\.\/]* ]]; then
+	if [[ "$table_name" = ['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  		echo -e "${YELLOW}Table name can't start special characters${NC}"
 		return 1;
 	fi
@@ -41,6 +42,14 @@ function validate_table_name {
 		return 1;
 	fi
 	
+	#English only
+	if [[ $table_name =~ $english ]]; then
+		return 0;
+	else
+ 		echo -e "${YELLOW}column_name support English only${NC}"
+		return 1
+	fi
+
 	return 0;
 }
 
@@ -97,13 +106,13 @@ function validate_column_name {
 	fi
 
 	#special characters
-	if [[ "$column_name" = *['!'@#\$%^\&*()-+\.\/]* ]]; then
+	if [[ "$column_name" = *['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  		echo -e "${YELLOW}column_name can't have special characters${NC}"
 		return 1;
 	fi
 
 	#special characters
-	if [[ "$column_name" = ['!'@#\$%^\&*()-+\.\/]* ]]; then
+	if [[ "$column_name" = ['!'@#\$%^\&*()'-'+'~'=\.\/]* ]]; then
  		echo -e "${YELLOW}column_name can't start special characters${NC}"
 		return 1;
 	fi
@@ -112,6 +121,14 @@ function validate_column_name {
 	if [[ "$column_name" = [0-9]* ]]; then
  		echo -e "${YELLOW}column_name can't start with number${NC}"
 		return 1;
+	fi
+
+	#English only
+	if [[ $column_name =~ $english ]]; then
+		return 0;
+	else
+ 		echo -e "${YELLOW}column_name support English only${NC}"
+		return 1
 	fi
 	
 	return 0;	

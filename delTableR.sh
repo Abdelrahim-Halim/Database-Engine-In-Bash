@@ -1,3 +1,4 @@
+
 #!/bin/bash
 function check_exist {
 	if [ -f "$table_name" ]; then
@@ -23,7 +24,7 @@ if check_exist; then
 			break
 		fi
 	done
-	sed -i "/$pkitem/d" $table_name;
+	sed -i "$pkitem d" $table_name;
 	echo "Row Deleted Sucssesfully 😎"
 	echo "Press Enter to Continue..."
 	read

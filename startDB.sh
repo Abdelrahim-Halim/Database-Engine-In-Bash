@@ -12,13 +12,16 @@ else
 	echo -e "${BLUE}*==== STRAT INSTALLING FOR YOUR EYES 😉 ====*${NC}"
 	sleep 2
 	clear	
-	echo "installing SA3EDY DATABASE {=  }"
+	echo "installing SA3EDY DATABASE {=   }"
 	sleep 1
 	clear
-	echo "installing SA3EDY DATABASE {== }"	
+	echo "installing SA3EDY DATABASE {==  }"	
 	sleep 2
 	clear
-	echo "installing SA3EDY DATABASE {===}"	
+	echo "installing SA3EDY DATABASE {=== }"	
+	sleep 2
+	clear
+	echo "installing SA3EDY DATABASE {====}"	
 	sleep 2
 	clear
 	echo "*==== SA3EDY DATABASE installed 😎 ====*"	

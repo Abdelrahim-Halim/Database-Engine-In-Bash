@@ -9,7 +9,7 @@ if [ -f "$table_name" ];then
 	echo  "*=============== Table $table_name ===============*"
 	awk 'BEGIN {FS=":"} {if(NR>0) printf $1"\t|\t"} END{printf "\n"}' $table_name.md
 	awk 'BEGIN{FS=" ";OFS="\t|\t";ORS="\n";}{  $1=$1; print substr($0, 1, length($0))}' $table_name
-	echo  "*============================================================*"
+	echo  "*=========================================*"
 	echo 
 	echo "press ENTER to back..."	
 	read 

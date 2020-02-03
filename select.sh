@@ -9,12 +9,16 @@ if [ -f "$table_name" ];then
 	awk 'BEGIN {FS=":"} {if(NR>0) printf $1"<"$2">\t\t"} END{printf "\n"}' $table_name.md
 	echo "*==== Enter the WHERE CONDITION u want to select ====*"
 	read -r pattern
-	boy=$(sed -n "/$pattern/p" $table_name)
-        if [[ -z $boy ]];then
+    if [[ -z $pattern ]];then
 		echo "Doesn't match any thing ... "
 	else 
-		sed -n "/$pattern/p" $table_name
-	fi
+		boy=$(sed -n "/$pattern/p" $table_name)
+	    if [[ -z $boy ]];then
+			echo "Doesn't match any thing ... "
+		else 
+			sed -n "/$pattern/p" $table_name
+		fi
+	fi	
 	echo "press ENTER to back..."
 	read 
 else
